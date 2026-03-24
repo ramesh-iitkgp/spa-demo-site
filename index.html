@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calm & Cozy Spa | Wellness & Relaxation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B7355;
+            --primary-light: #A0826D;
+            --accent: #D4A574;
+            --accent-light: #E8C4A0;
+            --bg-cream: #FDFCFB;
+            --bg-beige: #F5F1ED;
+            --text-dark: #2C2420;
+            --text-light: #6B6360;
+            --border: #E8DDD7;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        /* Announcement Bar */
+        .announcement {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(139, 115, 85, 0.3), rgba(139, 115, 85, 0.3)), url('https://images.unsplash.com/photo-1544161515-81aae3ff8b7f?w=1200&h=600&fit=crop');
+            background-size: cover;
+            background-position: center;
+            padding: 8rem 0;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2.5rem;
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(212, 165, 116, 0.3);
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 0;
+        }
+
+        section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        section h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: var(--accent);
+            margin: 1rem auto 0;
+        }
+
+        /* Benefits Section */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .benefit-card {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(212, 165, 116, 0.15);
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .benefit-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* Services/Menu Section */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .menu-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-price {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .menu-item p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .team-member {
+            text-align: center;
+        }
+
+        .member-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .team-member h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .team-member p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* FAQ Section */
+        .faq-item {
+            background-color: white;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .faq-answer {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, var(--bg-beige) 0%, white 100%);
+        }
+
+        .contact-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--accent);
+            text-align: center;
+        }
+
+        .contact-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item label {
+            display: block;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-item p {
+            color: var(--text-light);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: #d4c5b9;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            section h2 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                gap: 1.5rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script src="../assets/inject-data.js"></script>
+    <script>
+        window.TEMPLATE_CATEGORY = 'spa';
+    </script>
+
+    <!-- Announcement Bar -->
+    <div class="announcement">
+        ✨ Book Your Relaxation Session Today | Free Consultation Available
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">🧘 <span id="spaName">Calm & Cozy Spa</span></div>
+            <ul>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Your Sanctuary of Wellness</h1>
+            <p>Premium spa and wellness treatments for complete relaxation</p>
+            <button class="btn" id="bookBtn">Book Now</button>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section>
+        <div class="container">
+            <h2>Why Choose Us</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">♨️</div>
+                    <h3>Premium Treatments</h3>
+                    <p>Expert spa therapies using organic products and traditional techniques</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🌿</div>
+                    <h3>Natural Products</h3>
+                    <p>100% organic and cruelty-free products for your wellbeing</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">👥</div>
+                    <h3>Expert Therapists</h3>
+                    <p>Certified professionals with years of wellness expertise</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🕯️</div>
+                    <h3>Serene Ambiance</h3>
+                    <p>Peaceful environment with calming music and aromatherapy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <h3>Head & Neck Spa</h3>
+                    <div class="menu-price">₹1,500 | 60 min</div>
+                    <p>Korean head spa treatment for stress relief and scalp rejuvenation</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Full Body Massage</h3>
+                    <div class="menu-price">₹2,500 | 90 min</div>
+                    <p>Complete body relaxation with choice of different massage styles</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Facial Treatment</h3>
+                    <div class="menu-price">₹1,200 | 45 min</div>
+                    <p>Professional facials with organic skincare products</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Foot Reflexology</h3>
+                    <div class="menu-price">₹800 | 45 min</div>
+                    <p>Therapeutic foot treatment to improve overall wellness</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Couples Package</h3>
+                    <div class="menu-price">₹4,500 | 90 min</div>
+                    <p>Romantic spa experience for two in our private suite</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Wellness Retreat</h3>
+                    <div class="menu-price">₹8,000 | Full Day</div>
+                    <p>Complete spa day with multiple treatments and meals included</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" style="background-color: var(--bg-beige);">
+        <div class="container">
+            <h2>Meet Our Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop')"></div>
+                    <h3>Priya Sharma</h3>
+                    <p>Lead Therapist | 8+ years experience</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop')"></div>
+                    <h3>Wellness Expert</h3>
+                    <p>Certified Spa Professional</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop')"></div>
+                    <h3>Aromatherapy Specialist</h3>
+                    <p>International Certification</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question">❓ What should I bring?</div>
+                <div class="faq-answer">Bring a valid ID and wear comfortable clothes. We provide robes and slippers for all treatments.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">❓ How long should I arrive early?</div>
+                <div class="faq-answer">Please arrive 15 minutes before your appointment for check-in and to complete any forms.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">❓ Do you offer gift cards?</div>
+                <div class="faq-answer">Yes! We offer spa gift cards in various denominations. Perfect for gifts or group bookings.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">❓ Are your products organic?</div>
+                <div class="faq-answer">100% of our spa products are organic, cruelty-free, and hypoallergenic.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="contact-box">
+                <h3>Book Your Relaxation</h3>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <label>📞 Phone</label>
+                        <p id="spaPhone">+91 98765 43210</p>
+                    </div>
+                    <div class="contact-item">
+                        <label>📍 Location</label>
+                        <p id="spaLocation">New Delhi, India</p>
+                    </div>
+                    <div class="contact-item">
+                        <label>✉️ Email</label>
+                        <p id="spaEmail">info@calmspam.com</p>
+                    </div>
+                </div>
+                <button class="btn" id="whatsappBtn">Chat on WhatsApp</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="spaFooter">Calm & Cozy Spa</span> 2024. Your wellness is our priority.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Inject business data
+        setTimeout(() => {
+            if (window.businessData) {
+                document.getElementById('spaName').textContent = window.businessData.name || 'Calm & Cozy Spa';
+                document.getElementById('spaPhone').textContent = window.businessData.phone || '+91 98765 43210';
+                document.getElementById('spaLocation').textContent = window.businessData.location || 'New Delhi, India';
+                document.getElementById('spaEmail').textContent = window.businessData.email || 'info@calmspam.com';
+                document.getElementById('spaFooter').textContent = window.businessData.name || 'Calm & Cozy Spa';
+                
+                // Update WhatsApp button
+                if (window.whatsappLink) {
+                    document.getElementById('whatsappBtn').href = window.whatsappLink;
+                } else {
+                    document.getElementById('whatsappBtn').onclick = () => {
+                        const phone = window.businessData.phone || '919876543210';
+                        window.open(`https://wa.me/${phone}?text=Hi, I'm interested in booking a spa session at ${window.businessData.name}`, '_blank');
+                    };
+                }
+                
+                // Update book button
+                document.getElementById('bookBtn').onclick = document.getElementById('whatsappBtn').onclick;
+            }
+        }, 100);
+    </script>
+</body>
+</html>
