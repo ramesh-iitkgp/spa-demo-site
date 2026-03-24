@@ -1,554 +1,865 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calm & Cozy Spa | Wellness & Relaxation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title id="pageTitle">Cafe Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --color-cream: #FAF9F6;
+            --color-coffee: #2C1810;
+            --color-gold: #C9A227;
+            --color-beige: #F0EBE0;
+            --font-playfair: 'Playfair Display', serif;
+            --font-poppins: 'Poppins', sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #8B7355;
-            --primary-light: #A0826D;
-            --accent: #D4A574;
-            --accent-light: #E8C4A0;
-            --bg-cream: #FDFCFB;
-            --bg-beige: #F5F1ED;
-            --text-dark: #2C2420;
-            --text-light: #6B6360;
-            --border: #E8DDD7;
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Raleway', sans-serif;
-            background-color: var(--bg-cream);
-            color: var(--text-dark);
-            line-height: 1.7;
+            font-family: var(--font-poppins);
+            background-color: var(--color-cream);
+            color: var(--color-coffee);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* Announcement Bar */
-        .announcement {
-            background-color: var(--primary);
+        ::selection {
+            background-color: var(--color-gold);
             color: white;
-            padding: 0.8rem;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 500;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-cream);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4C5A5;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-gold);
         }
 
         /* Navigation */
         nav {
-            background-color: white;
-            padding: 1.5rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
+            width: 100%;
+            background: rgba(44, 24, 16, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            padding: 1rem 2rem;
         }
 
-        .container {
+        .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        nav .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--primary);
+        .nav-brand {
+            font-family: var(--font-playfair);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-gold);
         }
 
-        nav ul {
+        .nav-links {
             display: flex;
-            gap: 2.5rem;
+            gap: 2rem;
             list-style: none;
         }
 
-        nav a {
-            color: var(--text-dark);
+        .nav-links a {
+            color: var(--color-cream);
             text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
             transition: color 0.3s;
         }
 
-        nav a:hover {
-            color: var(--accent);
+        .nav-links a:hover {
+            color: var(--color-gold);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
         }
 
         /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(139, 115, 85, 0.3), rgba(139, 115, 85, 0.3)), url('https://images.unsplash.com/photo-1544161515-81aae3ff8b7f?w=1200&h=600&fit=crop');
-            background-size: cover;
-            background-position: center;
-            padding: 8rem 0;
+        #home {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-top: 60px;
+        }
+
+        .hero-background {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.4), rgba(0,0,0,0.7));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
             text-align: center;
             color: white;
+            padding: 2rem;
+            max-width: 56rem;
+            margin: 0 auto;
         }
 
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
+        .hero-subtitle {
+            display: block;
+            color: var(--color-gold);
+            font-size: 0.875rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
         }
 
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+        .hero-title {
+            font-family: var(--font-playfair);
+            font-size: clamp(2.5rem, 8vw, 7rem);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title span {
+            color: rgba(250, 249, 246, 0.9);
+            font-style: italic;
+            display: block;
+        }
+
+        .hero-description {
+            font-weight: 300;
+            font-size: 1.125rem;
+            color: rgba(250, 249, 246, 0.8);
+            max-width: 42rem;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (min-width: 640px) {
+            .hero-buttons {
+                flex-direction: row;
+            }
         }
 
         .btn {
-            display: inline-block;
-            padding: 0.9rem 2.5rem;
-            background-color: var(--accent);
-            color: white;
+            padding: 0.75rem 2rem;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
             text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
             transition: all 0.3s;
+            min-width: 180px;
             cursor: pointer;
             border: none;
-            font-size: 1rem;
+            font-family: var(--font-poppins);
         }
 
-        .btn:hover {
-            background-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(212, 165, 116, 0.3);
+        .btn-primary {
+            background-color: var(--color-gold);
+            color: white;
         }
 
-        /* Sections */
-        section {
-            padding: 5rem 0;
-        }
-
-        section h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.8rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            color: var(--text-dark);
-        }
-
-        section h2::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 2px;
-            background: var(--accent);
-            margin: 1rem auto 0;
-        }
-
-        /* Benefits Section */
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .benefit-card {
+        .btn-primary:hover {
             background-color: white;
-            padding: 2.5rem;
-            border-radius: 12px;
+            color: var(--color-coffee);
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: var(--color-coffee);
+            border-color: white;
+        }
+
+        /* About Section */
+        #about {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: var(--font-playfair);
+            font-size: clamp(2rem, 5vw, 3.5rem);
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 1px solid var(--border);
-            transition: all 0.3s;
+            margin-bottom: 3rem;
+            color: var(--color-coffee);
         }
 
-        .benefit-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(212, 165, 116, 0.15);
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
         }
 
-        .benefit-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        @media (max-width: 768px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
         }
 
-        .benefit-card h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            color: var(--primary);
-            margin-bottom: 0.8rem;
-        }
-
-        .benefit-card p {
-            color: var(--text-light);
+        .about-text p {
+            font-size: 1rem;
             line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: var(--color-coffee);
         }
 
-        /* Services/Menu Section */
-        .menu-grid {
+        /* Menu Section */
+        #menu {
+            background-color: var(--color-beige);
+            padding: 6rem 2rem;
+        }
+
+        .menu-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .menu-items {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
+            margin-top: 3rem;
         }
 
         .menu-item {
-            background-color: white;
+            background: white;
             padding: 2rem;
             border-radius: 8px;
-            border-left: 4px solid var(--accent);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 40px -10px rgba(44, 24, 16, 0.05);
         }
 
-        .menu-item h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            color: var(--primary);
+        .menu-item-name {
+            font-family: var(--font-playfair);
+            font-size: 1.5rem;
+            color: var(--color-coffee);
             margin-bottom: 0.5rem;
         }
 
-        .menu-price {
-            color: var(--accent);
+        .menu-item-price {
+            color: var(--color-gold);
             font-weight: 600;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
         }
 
-        .menu-item p {
-            color: var(--text-light);
+        .menu-item-desc {
+            color: #666;
             font-size: 0.95rem;
             line-height: 1.6;
         }
 
-        /* Team Section */
-        .team-grid {
+        /* Gallery Section */
+        #gallery {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
+            gap: 1.5rem;
+            margin-top: 3rem;
         }
 
-        .team-member {
-            text-align: center;
-        }
-
-        .member-image {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background-size: cover;
-            background-position: center;
-            margin: 0 auto 1.5rem;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-
-        .team-member h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            color: var(--primary);
-            margin-bottom: 0.3rem;
-        }
-
-        .team-member p {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        /* FAQ Section */
-        .faq-item {
-            background-color: white;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
             border-radius: 8px;
-            border-left: 4px solid var(--accent);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            height: 250px;
+            cursor: pointer;
         }
 
-        .faq-question {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            color: var(--primary);
-            margin-bottom: 0.8rem;
-            font-weight: 600;
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
         }
 
-        .faq-answer {
-            color: var(--text-light);
-            line-height: 1.8;
+        .gallery-item:hover img {
+            transform: scale(1.05);
         }
 
-        /* Contact Section */
-        .contact-section {
-            background: linear-gradient(135deg, var(--bg-beige) 0%, white 100%);
+        /* Reservation Section */
+        #reservation {
+            background: linear-gradient(135deg, var(--color-coffee) 0%, #3d2817 100%);
+            color: white;
+            padding: 6rem 2rem;
         }
 
-        .contact-box {
-            background: white;
-            padding: 3rem;
-            border-radius: 12px;
-            box-shadow: 0 12px 36px rgba(0,0,0,0.1);
-            border-top: 4px solid var(--accent);
-            text-align: center;
+        .reservation-container {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .contact-box h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 2rem;
+        .reservation-container .section-title {
+            color: white;
         }
 
-        .contact-info {
+        .reservation-form {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
 
-        .contact-item label {
+        .form-group {
+            grid-column: span 1;
+        }
+
+        @media (max-width: 640px) {
+            .reservation-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
             display: block;
-            font-weight: 600;
-            color: var(--primary);
             margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
         }
 
-        .contact-item p {
-            color: var(--text-light);
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-family: var(--font-poppins);
+            border-radius: 4px;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            grid-column: 1 / -1;
+            background-color: var(--color-gold);
+            color: white;
+            padding: 1rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            border-radius: 4px;
+        }
+
+        .submit-btn:hover {
+            background-color: white;
+            color: var(--color-coffee);
+        }
+
+        /* Reviews Section */
+        #reviews {
+            padding: 6rem 2rem;
+            background-color: var(--color-beige);
+        }
+
+        .reviews-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .review-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px -10px rgba(44, 24, 16, 0.05);
+        }
+
+        .review-stars {
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .review-text {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .review-author {
+            font-weight: 600;
+            color: var(--color-coffee);
+        }
+
+        /* Location Section */
+        #location {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .location-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .location-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .location-info h3 {
+            font-family: var(--font-playfair);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--color-coffee);
+        }
+
+        .location-info p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        .location-map {
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 400px;
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         /* Footer */
         footer {
-            background-color: var(--text-dark);
-            color: #d4c5b9;
-            padding: 2rem 0;
+            background-color: var(--color-coffee);
+            color: var(--color-cream);
+            padding: 3rem 2rem 1rem;
             text-align: center;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
 
-            section h2 {
-                font-size: 2rem;
-            }
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--color-gold);
+            font-family: var(--font-playfair);
+        }
 
-            nav ul {
-                gap: 1.5rem;
-                font-size: 0.85rem;
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--color-cream);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--color-gold);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(250, 249, 246, 0.1);
+            padding-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
         }
     </style>
 </head>
 <body>
-    <script src="../assets/inject-data.js"></script>
-    <script>
-        window.TEMPLATE_CATEGORY = 'spa';
-    </script>
-
-    <!-- Announcement Bar -->
-    <div class="announcement">
-        ✨ Book Your Relaxation Session Today | Free Consultation Available
-    </div>
-
     <!-- Navigation -->
     <nav>
-        <div class="container">
-            <div class="logo">🧘 <span id="spaName">Calm & Cozy Spa</span></div>
-            <ul>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#team">Team</a></li>
-                <li><a href="#faq">FAQ</a></li>
-                <li><a href="#contact">Contact</a></li>
+        <div class="nav-container">
+            <div class="nav-brand" id="navBrand">Open House</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#reservation">Book</a></li>
+                <li><a href="#location">Location</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Your Sanctuary of Wellness</h1>
-            <p>Premium spa and wellness treatments for complete relaxation</p>
-            <button class="btn" id="bookBtn">Book Now</button>
+    <section id="home">
+        <div class="hero-background">
+            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop" alt="Cafe Ambience">
         </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section>
-        <div class="container">
-            <h2>Why Choose Us</h2>
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="benefit-icon">♨️</div>
-                    <h3>Premium Treatments</h3>
-                    <p>Expert spa therapies using organic products and traditional techniques</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🌿</div>
-                    <h3>Natural Products</h3>
-                    <p>100% organic and cruelty-free products for your wellbeing</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">👥</div>
-                    <h3>Expert Therapists</h3>
-                    <p>Certified professionals with years of wellness expertise</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🕯️</div>
-                    <h3>Serene Ambiance</h3>
-                    <p>Peaceful environment with calming music and aromatherapy</p>
-                </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content fade-in">
+            <span class="hero-subtitle">Welcome to Siliguri's Finest</span>
+            <h1 class="hero-title">
+                <span id="heroTitle">Open House.</span>
+                <span style="color: rgba(250, 249, 246, 0.9); font-style: italic;">Great Coffee.</span>
+                <span>Good Times.</span>
+            </h1>
+            <p class="hero-description">Experience the perfect blend of artisanal coffee and culinary excellence in the heart of Siliguri. The best place for breakfast, coffee & snacks.</p>
+            <div class="hero-buttons">
+                <a href="#reservation" class="btn btn-primary">Book a Table</a>
+                <a href="#menu" class="btn btn-secondary">View Menu</a>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="services">
-        <div class="container">
-            <h2>Our Services</h2>
-            <div class="menu-grid">
-                <div class="menu-item">
-                    <h3>Head & Neck Spa</h3>
-                    <div class="menu-price">₹1,500 | 60 min</div>
-                    <p>Korean head spa treatment for stress relief and scalp rejuvenation</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Full Body Massage</h3>
-                    <div class="menu-price">₹2,500 | 90 min</div>
-                    <p>Complete body relaxation with choice of different massage styles</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Facial Treatment</h3>
-                    <div class="menu-price">₹1,200 | 45 min</div>
-                    <p>Professional facials with organic skincare products</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Foot Reflexology</h3>
-                    <div class="menu-price">₹800 | 45 min</div>
-                    <p>Therapeutic foot treatment to improve overall wellness</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Couples Package</h3>
-                    <div class="menu-price">₹4,500 | 90 min</div>
-                    <p>Romantic spa experience for two in our private suite</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Wellness Retreat</h3>
-                    <div class="menu-price">₹8,000 | Full Day</div>
-                    <p>Complete spa day with multiple treatments and meals included</p>
-                </div>
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">About Us</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Experience the perfect blend of artisanal coffee and culinary excellence. Our cafe is a sanctuary for coffee lovers and food enthusiasts alike.</p>
+                <p>We source premium coffee beans from sustainable farms across the world, ensuring every cup tells a story of quality and craftsmanship.</p>
+                <p>From our carefully curated menu to our warm ambiance, every detail is designed to create an unforgettable experience for our guests.</p>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1000&auto=format&fit=crop" alt="About" style="width: 100%; border-radius: 8px;">
             </div>
         </div>
     </section>
 
-    <!-- Team Section -->
-    <section id="team" style="background-color: var(--bg-beige);">
-        <div class="container">
-            <h2>Meet Our Team</h2>
-            <div class="team-grid">
-                <div class="team-member">
-                    <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop')"></div>
-                    <h3>Priya Sharma</h3>
-                    <p>Lead Therapist | 8+ years experience</p>
+    <!-- Menu Section -->
+    <section id="menu">
+        <div class="menu-container">
+            <h2 class="section-title">Our Menu</h2>
+            <div class="menu-items">
+                <div class="menu-item">
+                    <div class="menu-item-name">Ethiopian Blend</div>
+                    <div class="menu-item-price">₹450</div>
+                    <div class="menu-item-desc">Rich, full-bodied coffee with notes of blueberry and jasmine</div>
                 </div>
-                <div class="team-member">
-                    <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop')"></div>
-                    <h3>Wellness Expert</h3>
-                    <p>Certified Spa Professional</p>
+                <div class="menu-item">
+                    <div class="menu-item-name">Colombian Supreme</div>
+                    <div class="menu-item-price">₹380</div>
+                    <div class="menu-item-desc">Smooth and balanced with hints of chocolate and caramel</div>
                 </div>
-                <div class="team-member">
-                    <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop')"></div>
-                    <h3>Aromatherapy Specialist</h3>
-                    <p>International Certification</p>
+                <div class="menu-item">
+                    <div class="menu-item-name">Breakfast Combo</div>
+                    <div class="menu-item-price">₹650</div>
+                    <div class="menu-item-desc">Coffee + Croissant + Fresh Pastry</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-name">Signature Latte</div>
+                    <div class="menu-item-price">₹320</div>
+                    <div class="menu-item-desc">Creamy espresso with steamed milk and latte art</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-name">Iced Cappuccino</div>
+                    <div class="menu-item-price">₹350</div>
+                    <div class="menu-item-desc">Perfect for hot days - chilled espresso with ice and milk foam</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-name">Avocado Toast</div>
+                    <div class="menu-item-price">₹420</div>
+                    <div class="menu-item-desc">Freshly toasted bread with ripe avocado and poached egg</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section id="faq">
-        <div class="container">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-item">
-                <div class="faq-question">❓ What should I bring?</div>
-                <div class="faq-answer">Bring a valid ID and wear comfortable clothes. We provide robes and slippers for all treatments.</div>
+    <!-- Gallery Section -->
+    <section id="gallery">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=500&auto=format&fit=crop" alt="Coffee making">
             </div>
-            <div class="faq-item">
-                <div class="faq-question">❓ How long should I arrive early?</div>
-                <div class="faq-answer">Please arrive 15 minutes before your appointment for check-in and to complete any forms.</div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1495474472645-4c60fc953947?q=80&w=500&auto=format&fit=crop" alt="Cafe interior">
             </div>
-            <div class="faq-item">
-                <div class="faq-question">❓ Do you offer gift cards?</div>
-                <div class="faq-answer">Yes! We offer spa gift cards in various denominations. Perfect for gifts or group bookings.</div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?q=80&w=500&auto=format&fit=crop" alt="Pastries">
             </div>
-            <div class="faq-item">
-                <div class="faq-question">❓ Are your products organic?</div>
-                <div class="faq-answer">100% of our spa products are organic, cruelty-free, and hypoallergenic.</div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1514432324607-2df86e50c437?q=80&w=500&auto=format&fit=crop" alt="Coffee cup">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1486299267070-83823f5448dd?q=80&w=500&auto=format&fit=crop" alt="Ambiance">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=500&auto=format&fit=crop" alt="Seating">
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="contact-section" id="contact">
-        <div class="container">
-            <div class="contact-box">
-                <h3>Book Your Relaxation</h3>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <label>📞 Phone</label>
-                        <p id="spaPhone">+91 98765 43210</p>
-                    </div>
-                    <div class="contact-item">
-                        <label>📍 Location</label>
-                        <p id="spaLocation">New Delhi, India</p>
-                    </div>
-                    <div class="contact-item">
-                        <label>✉️ Email</label>
-                        <p id="spaEmail">info@calmspam.com</p>
-                    </div>
+    <!-- Reservation Section -->
+    <section id="reservation">
+        <div class="reservation-container">
+            <h2 class="section-title">Book Your Experience</h2>
+            <form class="reservation-form" onsubmit="handleReservation(event)">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Your Name" required>
                 </div>
-                <button class="btn" id="whatsappBtn">Chat on WhatsApp</button>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="time">Time</label>
+                    <input type="time" id="time" required>
+                </div>
+                <div class="form-group">
+                    <label for="guests">Number of Guests</label>
+                    <input type="number" id="guests" min="1" max="20" placeholder="2" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+                <div class="form-group full">
+                    <label for="message">Special Requests</label>
+                    <textarea id="message" placeholder="Any special requests or preferences?"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Book Now</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews">
+        <div class="reviews-container">
+            <h2 class="section-title">What Guests Say</h2>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"The best coffee experience in Siliguri! The ambiance is perfect and the staff is incredibly friendly."</p>
+                    <p class="review-author">- Priya Sharma</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Amazing pastries and the coldest cappuccino. This is now my favorite spot in the city!"</p>
+                    <p class="review-author">- Rajesh Kumar</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Premium quality coffee beans and a welcoming atmosphere. Highly recommended for coffee lovers."</p>
+                    <p class="review-author">- Sarah Johnson</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section id="location">
+        <h2 class="section-title">Find Us</h2>
+        <div class="location-content">
+            <div class="location-info">
+                <h3>Visit Our Cafe</h3>
+                <p><strong>Address:</strong> 123 Coffee Street, Siliguri, West Bengal 734001, India</p>
+                <p><strong>Phone:</strong> +91 9876543210</p>
+                <p><strong>Email:</strong> hello@openhousecafe.com</p>
+                <p><strong>Hours:</strong><br>
+                Monday - Friday: 7:00 AM - 9:00 PM<br>
+                Saturday - Sunday: 8:00 AM - 10:00 PM</p>
+            </div>
+            <div class="location-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3592.123456789!2d88.412!3d26.909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDU0JzMyLjQiTiA4OMKwMjQnNDMuMiJF!5e0!3m2!1sen!2sin!4v1234567890" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <p>&copy; <span id="spaFooter">Calm & Cozy Spa</span> 2024. Your wellness is our priority.</p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About</h4>
+                <p style="font-size: 0.95rem; line-height: 1.6;">Premium cafe experience with artisanal coffee and culinary excellence.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#reservation">Reservations</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#location">Location</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Open House Cafe. All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- PARAMETER INJECTION SCRIPT -->
     <script>
-        // Inject business data
-        setTimeout(() => {
-            if (window.businessData) {
-                document.getElementById('spaName').textContent = window.businessData.name || 'Calm & Cozy Spa';
-                document.getElementById('spaPhone').textContent = window.businessData.phone || '+91 98765 43210';
-                document.getElementById('spaLocation').textContent = window.businessData.location || 'New Delhi, India';
-                document.getElementById('spaEmail').textContent = window.businessData.email || 'info@calmspam.com';
-                document.getElementById('spaFooter').textContent = window.businessData.name || 'Calm & Cozy Spa';
-                
-                // Update WhatsApp button
-                if (window.whatsappLink) {
-                    document.getElementById('whatsappBtn').href = window.whatsappLink;
-                } else {
-                    document.getElementById('whatsappBtn').onclick = () => {
-                        const phone = window.businessData.phone || '919876543210';
-                        window.open(`https://wa.me/${phone}?text=Hi, I'm interested in booking a spa session at ${window.businessData.name}`, '_blank');
-                    };
+        // Function to convert "cafe-name" to "Cafe Name"
+        function slugToTitle(slug) {
+            if (!slug || typeof slug !== 'string') return 'Open House';
+            return slug
+                .split('-')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+        }
+
+        // Read URL parameters
+        function initializeCafeData() {
+            const params = new URLSearchParams(window.location.search);
+            const nameSlug = params.get('name') || 'open-house';
+            const locationParam = params.get('location') || 'siliguri';
+
+            // Convert slug to proper title case
+            const cafeName = slugToTitle(nameSlug);
+            const location = locationParam.charAt(0).toUpperCase() + locationParam.slice(1);
+
+            // Update page title
+            document.getElementById('pageTitle').textContent = "Trippy Goat Cafe | Premium Cafe";
+
+            // Update navigation
+            document.getElementById('navBrand').textContent = "Trippy Goat Cafe";
+
+            // Update hero section
+            document.getElementById('heroTitle').textContent = "Trippy Goat Cafe.";
+            
+            // Update hero description with location
+            const heroDesc = document.querySelector('.hero-description');
+            heroDesc.textContent = "Experience the perfect blend of artisanal coffee and culinary excellence in Bangalore. The best place for breakfast, coffee & snacks.`;
+
+            // Update location section name
+            const locationInfo = document.querySelector('.location-info');
+            if (locationInfo) {
+                const addressEl = locationInfo.querySelector('p:first-of-type');
+                if (addressEl) {
+                    addressEl.innerHTML = "<strong>Address:</strong> 123 Coffee Street, Bangalore, India";
                 }
-                
-                // Update book button
-                document.getElementById('bookBtn').onclick = document.getElementById('whatsappBtn').onclick;
             }
-        }, 100);
+
+            // Console logging for debugging
+            console.log('✅ CAFE NAME INJECTION SUCCESSFUL');
+            console.log('  Cafe Name:', cafeName);
+            console.log('  Location:', location);
+            console.log('  URL:', window.location.href);
+        }
+
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', initializeCafeData);
+
+        // Handle reservation form
+        function handleReservation(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            alert(`Thank you, ${name}! Your reservation request has been received. We'll confirm shortly.`);
+            event.target.reset();
+        }
     </script>
 </body>
 </html>
