@@ -10,6 +10,13 @@ import sys
 from pathlib import Path
 from datetime import datetime
 
+# Allow importing the shared WhatsApp campaign generator in this scripts folder
+SCRIPT_DIR = Path(__file__).parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.append(str(SCRIPT_DIR))
+
+from whatsapp_campaign_generator import generate_campaign, save_campaigns
+
 def main():
     print("\n" + "="*70)
     print("  START-TO-FINISH WORKFLOW")
@@ -27,20 +34,29 @@ def main():
     business_type = script_path.name
     leads_dir = script_path / "data" / "leads"
     
-    # Find first leads file
-    leads_files = list(leads_dir.glob("leads_*.csv"))
+    # Find LATEST leads file for THIS SPECIFIC CITY
+    city_slug = city_name.lower().replace(" ", "_")
+    leads_files = list(leads_dir.glob(f"leads_{city_slug}_*.csv"))
+    
+    if not leads_files:
+        print(f"⚠️  No leads found for city '{city_name}'. Checking for any available leads...")
+        leads_files = list(leads_dir.glob("leads_*.csv"))
+    
     if not leads_files:
         print(f"❌ No leads files found in {leads_dir}")
         return
     
-    leads_file = leads_files[0]
+    leads_file = sorted(leads_files)[-1]  # Get LATEST for this city
     
     leads = []
     with open(leads_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         leads = list(reader)
     
-    print(f"✅ Loaded {len(leads)} leads from {leads_file}")
+    leads_mtime = datetime.fromtimestamp(leads_file.stat().st_mtime).strftime('%Y-%m-%d %H:%M:%S')
+    print(f"✅ Loaded {len(leads)} leads from LATEST file:")
+    print(f"   📁 File: {leads_file.name}")
+    print(f"   ⏰ Modified: {leads_mtime}")
     if leads and 'name' in leads[0]:
         print(f"   Sample: {leads[0]['name']}")
     elif leads:
@@ -64,28 +80,12 @@ def main():
     
     print(f"✅ Cleaned: {len(valid_leads)} valid leads (removed {len(leads)-len(valid_leads)} invalid)")
     
-    # STEP 3: CREATE WHATSAPP CAMPAIGN
+    # STEP 3: CREATE WHATSAPP CAMPAIGN using UNIVERSAL generator
     print("\n💬 STEP 3: GENERATE WHATSAPP CAMPAIGN")
     
-    whatsapp_data = []
-    for i, lead in enumerate(valid_leads[:20], 1):  # First 20
-        name = lead.get('name', 'Business')
-        phone = lead.get('phone', '')
-        
-        # Create WhatsApp message
-        message = f"Hi {name},\nWe have an exciting website for your cafe!\nCheck it out"
-        
-        # Create clickable WhatsApp link
-        link = f"https://wa.me/{phone}?text={message.replace(' ', '%20').replace(chr(10), '%0A')}"
-        
-        whatsapp_data.append({
-            'name': name,
-            'phone': phone,
-            'whatsapp_link': link,
-            'status': 'ready_to_send'
-        })
-    
-    print(f"✅ Created {len(whatsapp_data)} WhatsApp messages")
+    # Use the universal campaign generator so all businesses share the same IIT-KGP template
+    campaigns = generate_campaign(str(leads_file), business_type, city_name, output_format='csv')
+    print(f"✅ Created {len(campaigns)} WhatsApp messages")
     
     # STEP 4: SAVE RESULTS
     print("\n💾 STEP 4: SAVE OUTPUT FILES")
@@ -96,13 +96,8 @@ def main():
     campaigns_dir.mkdir(parents=True, exist_ok=True)
     results_dir.mkdir(parents=True, exist_ok=True)
     
-    # Save campaign CSV
-    campaign_file = campaigns_dir / f"campaign_{city_slug}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-    with open(campaign_file, 'w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=['name', 'phone', 'whatsapp_link', 'status'])
-        writer.writeheader()
-        writer.writerows(whatsapp_data)
-    
+    # Save campaign via shared saver (writes full columns including message/demo_link/whatsapp_link)
+    campaign_file = save_campaigns(campaigns, business_type, city_name, output_format='csv')
     print(f"✅ Saved: {campaign_file}")
     
     # Save report
@@ -115,8 +110,8 @@ def main():
             'leads_loaded': len(leads),
             'leads_valid': len(valid_leads),
             'leads_invalid': len(leads) - len(valid_leads),
-            'whatsapp_messages': len(whatsapp_data),
-            'ready_to_send': len([x for x in whatsapp_data if x['status'] == 'ready_to_send'])
+            'whatsapp_messages': len(campaigns),
+            'ready_to_send': len([x for x in campaigns if x.get('status') == 'ready_to_send'])
         }
     }
     
@@ -132,7 +127,7 @@ def main():
     print("="*70)
     print(f"\n📊 RESULTS:")
     print(f"   ✅ Leads processed:     {len(valid_leads)}")
-    print(f"   ✅ WhatsApp messages:   {len(whatsapp_data)}")
+    print(f"   ✅ WhatsApp messages:   {len(campaigns)}")
     print(f"   ✅ Ready to send:       {report['metrics']['ready_to_send']}")
     print(f"\n📁 OUTPUT FILES:")
     print(f"   • {campaign_file}")

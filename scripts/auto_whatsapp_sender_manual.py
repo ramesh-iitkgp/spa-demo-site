@@ -28,22 +28,60 @@ async def send_whatsapp_messages_manual():
     print("  📱 WHATSAPP SENDER - Semi-Manual (No Reload, More Reliable)")
     print("="*80 + "\n")
     
-    # Find latest messages CSV
-    csv_files = list(Path('.').glob('whatsapp_messages_*.csv'))
+    # Find latest campaign CSV from data/campaigns
+    base_path = Path(__file__).resolve().parent.parent  # business root
+    campaigns_dir = base_path / 'data' / 'campaigns'
+    csv_files = list(campaigns_dir.glob('campaign_*.csv'))
     if not csv_files:
-        print("❌ No whatsapp_messages_*.csv found")
+        print(f"❌ No campaign_*.csv found in {campaigns_dir}")
         return False
-    
-    messages_file = sorted(csv_files)[-1]
-    print(f"📁 Using: {messages_file}\n")
-    
+
+    # Sort by file modification time (most recent first), not alphabetically
+    messages_file = max(csv_files, key=lambda f: f.stat().st_mtime)
+    print(f"📁 Using LATEST campaign file: {messages_file.name}")
+    print(f"   Full path: {messages_file}")
+    print(f"   Last modified: {datetime.fromtimestamp(messages_file.stat().st_mtime).strftime('%Y-%m-%d %H:%M:%S')}")
+
     # Read messages
     messages = []
     with open(messages_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         messages = list(reader)
     
-    print(f"📊 Found {len(messages)} messages\n")
+    # Check for resume opportunity
+    sent_count_prev = sum(1 for m in messages if m.get('status', '').strip().lower() == 'sent')
+    pending_count = len(messages) - sent_count_prev
+    
+    print(f"📊 Found {len(messages)} messages total")
+    print(f"   ✅ Already sent: {sent_count_prev}")
+    print(f"   ⏳ Pending: {pending_count}\n")
+    
+    if sent_count_prev > 0 and pending_count > 0:
+        print("🔄 RESUME OPTION AVAILABLE")
+        print(f"   You can resume from where you left off ({pending_count} messages remaining)")
+        resume_choice = input("   Resume from last position? (yes/no): ").strip().lower()
+        if resume_choice == 'yes':
+            messages = [m for m in messages if m.get('status', '').strip().lower() != 'sent']
+            print(f"   ✅ Resuming with {len(messages)} pending messages\n")
+        else:
+            print(f"   Resetting: will resend all {len(messages)} messages\n")
+            # Reset status for all
+            for msg in messages:
+                msg['status'] = 'pending'
+    elif sent_count_prev == len(messages):
+        print("✅ All messages already sent!")
+        print("   Do you want to resend them?")
+        resend_choice = input("   Resend all messages? (yes/no): ").strip().lower()
+        if resend_choice != 'yes':
+            print("\n❌ Cancelled")
+            return False
+        # Reset status for all
+        for msg in messages:
+            msg['status'] = 'pending'
+    else:
+        print(f"   Starting fresh: {len(messages)} messages to send\n")
+        for msg in messages:
+            msg['status'] = 'pending'
     
     print("⚠️  HOW THIS WORKS:")
     print("  1. Browser opens each chat with message pre-filled")
@@ -82,9 +120,10 @@ async def send_whatsapp_messages_manual():
         
         for idx, msg_data in enumerate(messages, 1):
             try:
-                cafe_name = msg_data['cafe_name'].strip()
-                phone = msg_data['phone'].strip()
-                message = msg_data['message'].strip()
+                name = (msg_data.get('name') or msg_data.get('cafe_name') or 'Business').strip()
+                phone = msg_data.get('phone', '').strip()
+                message = msg_data.get('message', '').strip()
+                whatsapp_link = msg_data.get('whatsapp_link', '').strip()
                 
                 # Clean phone number
                 phone_clean = re.sub(r'\D', '', phone)
@@ -93,20 +132,47 @@ async def send_whatsapp_messages_manual():
                 phone_clean = phone_clean[-10:]
                 
                 if len(phone_clean) != 10 or not phone_clean.isdigit():
-                    print(f"[{idx:2d}/{len(messages)}] {cafe_name:40s} ❌ Invalid number")
+                    print(f"[{idx:2d}/{len(messages)}] {name:40s} ❌ Invalid number")
                     failed_count += 1
                     continue
                 
                 phone_full = f"91{phone_clean}"
                 
-                print(f"[{idx:2d}/{len(messages)}] {cafe_name:40s}")
-                
-                # Open chat with pre-filled message
-                encoded_message = quote(message)
-                whatsapp_url = f"https://web.whatsapp.com/send?phone={phone_full}&text={encoded_message}"
-                
+                print(f"[{idx:2d}/{len(messages)}] {name:40s}")
+
+                # Prefer precomputed whatsapp_link if available, otherwise build from phone/message
+                if whatsapp_link:
+                    whatsapp_url = whatsapp_link
+                else:
+                    encoded_message = quote(message)
+                    whatsapp_url = f"https://web.whatsapp.com/send?phone={phone_full}&text={encoded_message}"
+
                 await page.goto(whatsapp_url, wait_until="domcontentloaded", timeout=8000)
-                await page.wait_for_timeout(1500)
+                
+                # Wait longer for first message, shorter for subsequent
+                if idx == 1:
+                    print("  ⏳ First chat - waiting for UI to fully load...")
+                    await page.wait_for_timeout(5000)  # 5 seconds for first chat
+                    # Try multiple selectors for input box
+                    selectors = [
+                        '[contenteditable="true"]',
+                        '[data-testid="message-input"]',
+                        '[role="textbox"]',
+                        '#main div[contenteditable="true"]'
+                    ]
+                    for sel in selectors:
+                        try:
+                            await page.wait_for_selector(sel, timeout=2000)
+                            break
+                        except:
+                            pass
+                    # Click on input area to ensure it's focused
+                    try:
+                        await page.click('[contenteditable="true"]')
+                    except:
+                        pass
+                else:
+                    await page.wait_for_timeout(1000)  # 1 second for subsequent chats
                 
                 # Show message preview
                 print(f"  📝 Message preview: {message[:60]}...")
@@ -118,6 +184,9 @@ async def send_whatsapp_messages_manual():
                 
                 print(f"  ✅ Sent!\n")
                 sent_count += 1
+                
+                # Update status in the message dict
+                lead['status'] = 'sent'
                 
                 await page.wait_for_timeout(500)
                 
@@ -138,6 +207,16 @@ async def send_whatsapp_messages_manual():
         
         await context.close()
         await browser.close()
+    
+    # Save updated campaign CSV with status changes
+    print("\n💾 Saving campaign status updates...")
+    fieldnames = ['name', 'phone', 'address', 'city', 'business_type', 'demo_link', 'message', 'whatsapp_link', 'status', 'timestamp']
+    with open(messages_file, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(messages)
+    
+    print(f"✅ Updated campaign file with status changes\n")
     
     # Save log
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
